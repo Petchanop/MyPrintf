@@ -6,7 +6,7 @@
 /*   By: npiya-is <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/13 16:58:18 by npiya-is          #+#    #+#             */
-/*   Updated: 2022/03/16 23:12:50 by npiya-is         ###   ########.fr       */
+/*   Updated: 2022/03/18 19:00:38 by npiya-is         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <stdarg.h>
-# include "libft.h"
+# include "libft/libft.h"
 
 typedef struct s_format
 {
@@ -30,4 +30,7 @@ typedef struct s_format
 	char	type;
 	struct s_format	*next;
 }	t_format;
+
+int	ft_printf(const char *format, ...);
+
 #endif

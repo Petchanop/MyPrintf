@@ -6,15 +6,22 @@
 /*   By: npiya-is <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/13 17:02:46 by npiya-is          #+#    #+#             */
-/*   Updated: 2022/03/18 01:25:28 by npiya-is         ###   ########.fr       */
+/*   Updated: 2022/03/19 23:22:51 by npiya-is         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
+char	*ft_ctoa(char ch);
+
+char	*ft_utoa(unsigned int n);
+
+char	*ft_ptoa(unsigned long long n);
+
 void	ft_putchar(char c)
 {
-	write(1, &c, 1);
+	if (c)
+		write(1, &c, 1);
 }
 
 void	ft_putstr(char *str)
@@ -29,7 +36,7 @@ void	ft_putstr(char *str)
 	}
 }
 
-char	*ft_convert_hex(long n, int digit, char *str,int up_or_lo)
+char	*ft_convert_hex(long long n, int digit, char *str,int up_or_lo)
 {
 	char	*hex;
 	char	*lower;
@@ -41,7 +48,7 @@ char	*ft_convert_hex(long n, int digit, char *str,int up_or_lo)
 		hex = lower;
 	else
 		hex = upper;
-	while (digit)
+	while (n)
 	{
 		str[digit - 1] = hex[(n % 16)];
 		n /= 16;
@@ -50,9 +57,9 @@ char	*ft_convert_hex(long n, int digit, char *str,int up_or_lo)
 	return (str);
 }
 
-char	*ft_hextoa(long n, int up_or_lo)
+char	*ft_hextoa(long long n, int up_or_lo)
 {
-	long	i;
+	long long	i;
 	int		j;
 	char	*str;
 
@@ -65,10 +72,7 @@ char	*ft_hextoa(long n, int up_or_lo)
 	}
 	if (n < 0)
 		j += 1;
-	str = malloc((j + 1) * sizeof(char));
-	if (!(str))
-		return (NULL);
-	str[j] = '\0';
+	str = ft_calloc(1, j + 1);
 	if (n >= 0)
 		str = ft_convert_hex(n, j, str, up_or_lo);
 	else
@@ -82,13 +86,18 @@ char	*ft_hextoa(long n, int up_or_lo)
 char	*ft_convert_args(t_format *form, va_list src)
 {
 	char	*str;
-//	char	c;
+	char	c;
 	int	i;
-	unsigned long	u;
+	long int	u;
 	void	*ptr;
 
 	u = 0;
 	i = 0;
+	if (form->type == 'c')
+	{
+		c = va_arg(src, int);
+		return (ft_ctoa(c));
+	}
 	if (form->type == 's')
 	{
 		str = va_arg(src, char *);
@@ -99,32 +108,36 @@ char	*ft_convert_args(t_format *form, va_list src)
 		i = va_arg(src, int);
 		return (ft_itoa(i));
 	}
+	if (form->type == 'i')
+	{
+		i = va_arg(src, int);
+		return (ft_itoa(i));
+	}
 	if (form->type == 'u')
 	{
 		u = va_arg(src, unsigned int);
-		return (ft_itoa(u));
+		return (ft_utoa(u));
 	}
 	if (form->type == 'p')
 	{
 		ptr = va_arg(src, void *);
-		return (ft_hextoa((unsigned long long)ptr, 1));
+		return (ft_ptoa((unsigned long)ptr));
 	}
 	if (form->type == 'x')
 	{
-		u = va_arg(src, unsigned long);
+		u = va_arg(src, unsigned int);
 		return (ft_hextoa(u, 1));
 	}
 	if (form->type == 'X')
 	{
-		u = va_arg(src, unsigned long);
+		u = va_arg(src, unsigned int);
 		return (ft_hextoa(u, 0));
 	}
-/*	if (form->type == '%')
+	if (form->type == '%')
 	{
-		c = va_arg(src, char);
-		return (&c);
+		c = '%';
+		return (ft_ctoa(c));
 	}
-*/	
 	return (NULL);
 }
 /*

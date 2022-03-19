@@ -6,7 +6,7 @@
 /*   By: npiya-is <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/13 16:57:56 by npiya-is          #+#    #+#             */
-/*   Updated: 2022/03/18 01:25:21 by npiya-is         ###   ########.fr       */
+/*   Updated: 2022/03/19 18:21:35 by npiya-is         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ char	*ft_convert_args(t_format *form, va_list src);
 int	ft_check_format(const char c);
 
 t_format	*ft_check_type(char *format, t_format *form);
+
+void	ft_putchar(char c);
 
 void	ft_putstr(char *str);
 
@@ -103,7 +105,7 @@ t_format	*ft_create_format(const char *format)
 		}
 		i++;
 	}
-//	ft_print_data(form_data);
+	//ft_print_data(form_data);
 	return (form_data);
 }
 
@@ -111,7 +113,8 @@ int	ft_printf(const char *format, ...)
 {
 	va_list src;
 	int	args;
-	size_t	max;
+	int	max;
+	int	count;
 	size_t	i;
 	t_format	*form;
 	t_format	*tmp;
@@ -119,49 +122,49 @@ int	ft_printf(const char *format, ...)
 
 	args = 0;
 	i = 0;
+	max = 0;
+	count = 0;
 	form = ft_create_format(format);
-	max = ft_count_sign(form);
+//	max = ft_count_sign(form);
 	va_start(src, format);
-	while (*(format + i))
+	while (*(format + i) && i < ft_strlen(format))
 	{
 		if (ft_check_format(*(format + i)) && form)
 		{
-			if (form)
+			str = ft_convert_args(form, src);
+			if (str)
 			{
-				str = ft_convert_args(form, src);
 				ft_putstr(str);
-				free(str);
-				i += (form->len + 1);
-				tmp = form;
-				form = form->next;
-				free(tmp);
+				max += ft_strlen(str);
 			}
+			free(str);
+			i = form->n + 1;
+			tmp = form;
+			form = form->next;
+			free(tmp);
 		}
-		write(1, &*(format + i), 1);
+		if (*(format + i) && i < ft_strlen(format))
+			count++;
+		ft_putchar(*(format + i));
 		i++;
 	}
-	//va_copy(dest, src);
-/*	while (form)
-	{
-			str = ft_convert_args(form, src);
-			ft_putstr(str);
-			form = form->next;
-	}
-	printf("\n");
-*/	va_end(src);
-
-	return (max);
+	va_end(src);
+//	printf("\nmax : %d\n", max + count);
+	return (max + count);
 }
-
+/*
 int	main(void)
 {
-	int	i = 1;
-	long	j = 134;
-	long	a = 65789;
-	char	*str;
-
-	str = "arrrrt";
-	ft_printf("test %d %s\n", i, str);
-	ft_printf("test %x %s\n", j, str);
-	ft_printf("test %d %p\n", i, a);
-}
+	 char *s2 = "Mussum Ipsum, cacilds vidis litro abertis. Posuere libero varius. Nullam a nisl ut ante blandit hendrerit. Aenean sit amet nisi. Atirei o pau no gatis, per gatis num morreus.";
+	 ft_printf("%s", "");
+	 ft_printf(" %s", "");
+	 ft_printf("%s ", "");
+	 ft_printf(" %s ", "");
+	 ft_printf(" %s ", "-");
+	 ft_printf(" %s %s ", "", "-");
+	 ft_printf(" %s %s ", " - ", "");
+	 ft_printf(" %s %s %s %s %s", " - ", "", "4", "", s2);
+	 ft_printf(" %s %s %s %s %s ", " - ", "", "4", "", "2 ");
+	// ft_printf(" NULL %s NULL ", NULL);
+	// printf("\n %s %s %s %s %s\n", " - ", "", "4", "", s2);
+}*/
