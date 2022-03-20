@@ -6,7 +6,7 @@
 /*   By: npiya-is <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/13 16:57:56 by npiya-is          #+#    #+#             */
-/*   Updated: 2022/03/19 18:21:35 by npiya-is         ###   ########.fr       */
+/*   Updated: 2022/03/20 19:05:03 by npiya-is         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,6 @@ t_format	*ft_create_format(const char *format)
 
 	i = 0;
 	ptr = (char *)format;
-	//form_data = malloc(sizeof(t_format));
 	form_data = NULL;
 	while (*(ptr + i))
 	{
@@ -125,7 +124,6 @@ int	ft_printf(const char *format, ...)
 	max = 0;
 	count = 0;
 	form = ft_create_format(format);
-//	max = ft_count_sign(form);
 	va_start(src, format);
 	while (*(format + i) && i < ft_strlen(format))
 	{
@@ -137,19 +135,23 @@ int	ft_printf(const char *format, ...)
 				ft_putstr(str);
 				max += ft_strlen(str);
 			}
+			else
+				max += 1;
 			free(str);
 			i = form->n + 1;
 			tmp = form;
 			form = form->next;
 			free(tmp);
 		}
-		if (*(format + i) && i < ft_strlen(format))
+		if (!ft_check_format(*(format + i)) && *(format + i))
+		{
 			count++;
-		ft_putchar(*(format + i));
-		i++;
+			ft_putchar(*(format + i));
+			i++;
+		}
 	}
 	va_end(src);
-//	printf("\nmax : %d\n", max + count);
+	//printf("\nmax : %d\n", max + count);
 	return (max + count);
 }
 /*

@@ -6,7 +6,7 @@
 /*   By: npiya-is <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/18 17:15:29 by npiya-is          #+#    #+#             */
-/*   Updated: 2022/03/20 00:01:47 by npiya-is         ###   ########.fr       */
+/*   Updated: 2022/03/20 18:53:02 by npiya-is         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ char	*ft_utoa(unsigned int n)
 	return (str);
 }
 
-static char	*ft_convert_p(size_t n, int digit, char *str)
+static char	*ft_convert_p(unsigned long long n, int digit, char *str)
 {
 	char	*hex;
 
@@ -62,27 +62,29 @@ static char	*ft_convert_p(size_t n, int digit, char *str)
 	while (digit)
 	{
 		str[digit + 1] = hex[(n % 16)];
-		n /= 16;
+		n = n / 16;
 		digit--;
 	}
 	return (str);
 }
 
-char	*ft_ptoa(void *ptr)
+char	*ft_ptoa(unsigned long long ptr)
 {
-	size_t	n;
-	size_t	i;
+	unsigned long long	n;
+	unsigned long long	i;
 	int		j;
 	char	*str;
 
-	i = 16;
-	j = 1;
-	n = (size_t)ptr;
-	while (n / i)
+	n = (unsigned long long)ptr;
+	i = n;
+	j = 0;
+	while (i)
 	{
-		i *= 16;
+		i /= 16;
 		j++;
 	}
+	if (n == 0)
+		j++;
 	str = malloc((j + 3) * sizeof(char));
 	if (!(str))
 		return (NULL);

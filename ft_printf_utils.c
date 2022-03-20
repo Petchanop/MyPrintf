@@ -6,7 +6,7 @@
 /*   By: npiya-is <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/13 17:02:46 by npiya-is          #+#    #+#             */
-/*   Updated: 2022/03/19 23:22:51 by npiya-is         ###   ########.fr       */
+/*   Updated: 2022/03/20 19:05:53 by npiya-is         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,11 @@ char	*ft_convert_hex(long long n, int digit, char *str,int up_or_lo)
 
 	lower = "0123456789abcdef";
 	upper = "0123456789ABCDEF";
+	if (n == 0)
+	{
+		str[0] = '0';
+		return (str);
+	}
 	if (up_or_lo)
 		hex = lower;
 	else
@@ -89,18 +94,21 @@ char	*ft_convert_args(t_format *form, va_list src)
 	char	c;
 	int	i;
 	long int	u;
-	void	*ptr;
+	unsigned char	*ptr;
 
 	u = 0;
 	i = 0;
 	if (form->type == 'c')
 	{
 		c = va_arg(src, int);
-		return (ft_ctoa(c));
+		ft_putchar(c);
+		return NULL;
 	}
 	if (form->type == 's')
 	{
 		str = va_arg(src, char *);
+		if (!str)
+			str = "(null)";
 		return (ft_strdup(str));
 	}
 	if (form->type == 'd')
@@ -120,8 +128,8 @@ char	*ft_convert_args(t_format *form, va_list src)
 	}
 	if (form->type == 'p')
 	{
-		ptr = va_arg(src, void *);
-		return (ft_ptoa((unsigned long)ptr));
+		ptr = (unsigned char *)va_arg(src, void *);
+		return (ft_ptoa((unsigned long long)ptr));
 	}
 	if (form->type == 'x')
 	{
