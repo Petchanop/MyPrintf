@@ -6,7 +6,7 @@
 /*   By: npiya-is <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/13 17:02:46 by npiya-is          #+#    #+#             */
-/*   Updated: 2022/03/20 19:05:53 by npiya-is         ###   ########.fr       */
+/*   Updated: 2022/03/20 21:57:25 by npiya-is         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,7 @@ char	*ft_ptoa(unsigned long long n);
 
 void	ft_putchar(char c)
 {
-	if (c)
-		write(1, &c, 1);
+	write(1, &c, 1);
 }
 
 void	ft_putstr(char *str)
@@ -45,10 +44,7 @@ char	*ft_convert_hex(long long n, int digit, char *str,int up_or_lo)
 	lower = "0123456789abcdef";
 	upper = "0123456789ABCDEF";
 	if (n == 0)
-	{
 		str[0] = '0';
-		return (str);
-	}
 	if (up_or_lo)
 		hex = lower;
 	else
@@ -68,13 +64,10 @@ char	*ft_hextoa(long long n, int up_or_lo)
 	int		j;
 	char	*str;
 
-	i = 16;
+	i = (long long)n;
 	j = 1;
-	while (n / i)
-	{
-		i *= 16;
+	while (i /= 16)
 		j++;
-	}
 	if (n < 0)
 		j += 1;
 	str = ft_calloc(1, j + 1);

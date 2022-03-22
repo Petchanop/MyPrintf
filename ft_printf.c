@@ -6,7 +6,7 @@
 /*   By: npiya-is <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/13 16:57:56 by npiya-is          #+#    #+#             */
-/*   Updated: 2022/03/20 19:05:03 by npiya-is         ###   ########.fr       */
+/*   Updated: 2022/03/20 21:48:56 by npiya-is         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,7 @@ int	ft_printf(const char *format, ...)
 				ft_putstr(str);
 				max += ft_strlen(str);
 			}
-			else
+			if (form->type == 'c')
 				max += 1;
 			free(str);
 			i = form->n + 1;
