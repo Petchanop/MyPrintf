@@ -6,7 +6,7 @@
 /*   By: npiya-is <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/13 16:57:56 by npiya-is          #+#    #+#             */
-/*   Updated: 2022/03/27 15:51:55 by npiya-is         ###   ########.fr       */
+/*   Updated: 2022/03/27 17:31:47 by npiya-is         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,20 +24,7 @@ char		*ft_convert_args(t_format *form, va_list src);
 
 void		ft_putchar(char c);
 
-void	ft_print_data(t_format	*format)
-{
-	while (format)
-	{
-		printf("form_data->n   : %d\n", format->n);
-		printf("form_data->len : %d\n", format->len);
-		printf("form_data->p   : %d\n", format->para);
-		printf("form_data->w   : %d\n", format->width);
-		printf("form_data->pr  : %d\n", format->pre);
-		printf("form_data->f   : %c\n", format->flag);
-		printf("form_data->t   : %c\n", format->type);
-		format = format->next;
-	}
-}
+void		ft_print_data(t_format	*format);
 
 size_t	ft_count_sign(t_format *format)
 {
@@ -113,13 +100,9 @@ int	ft_printf(const char *format, ...)
 {
 	va_list	src;
 	int		max;
-	size_t	i;
-	size_t	len;
 	t_format	*form;
 
-	i = 0;
 	max = 0;
-	len = 0;
 	form = ft_create_format(format);
 	va_start(src, format);
 	max = ft_print_format(format, form, src);

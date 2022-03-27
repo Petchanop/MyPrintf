@@ -6,15 +6,13 @@
 /*   By: npiya-is <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 16:44:04 by npiya-is          #+#    #+#             */
-/*   Updated: 2022/03/27 16:11:02 by npiya-is         ###   ########.fr       */
+/*   Updated: 2022/03/27 17:28:01 by npiya-is         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-char		*ft_convert_args(t_format *form, va_list src);
-
-size_t		ft_putformatstr(char *str, t_format *form);
+size_t		ft_count_printf(t_format *form, va_list src);
 
 t_format	*ft_check_type(char *format, t_format *form);
 
@@ -24,25 +22,17 @@ void		ft_putchar(char c);
 
 int	ft_print_format(const char *format, t_format *form, va_list src)
 {
-	char		*str;
 	size_t		i;
-	int			max;
 	int			count;
 	t_format	*tmp;
 
 	i = 0;
-	max = 0;
 	count = 0;
 	while (*(format + i) && i < ft_strlen(format))
 	{
 		if (ft_check_format(*(format + i)) && form)
 		{
-			str = ft_convert_args(form, src);
-			if (str)
-				max += ft_putformatstr(str, form);
-			if (form->type == 'c' || form->type == '%')
-				max += 1;
-			free(str);
+			count += ft_count_printf(form, src);
 			i = form->n + form->len;
 			tmp = form;
 			form = form->next;
@@ -55,5 +45,5 @@ int	ft_print_format(const char *format, t_format *form, va_list src)
 			i++;
 		}
 	}
-	return (max + count);
+	return (count);
 }
