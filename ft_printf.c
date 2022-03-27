@@ -6,7 +6,7 @@
 /*   By: npiya-is <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/13 16:57:56 by npiya-is          #+#    #+#             */
-/*   Updated: 2022/03/27 17:31:47 by npiya-is         ###   ########.fr       */
+/*   Updated: 2022/03/27 20:33:29 by npiya-is         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,14 +92,13 @@ t_format	*ft_create_format(const char *format)
 		}
 		i++;
 	}
-	//ft_print_data(form_data);
 	return (form_data);
 }
 
 int	ft_printf(const char *format, ...)
 {
-	va_list	src;
-	int		max;
+	va_list		src;
+	int			max;
 	t_format	*form;
 
 	max = 0;
@@ -109,10 +108,13 @@ int	ft_printf(const char *format, ...)
 	va_end(src);
 	return (max);
 }
-/*
+/*//ft_print_data(form_data);
 int	main(void)
 {
-	 char *s2 = "Mussum Ipsum, cacilds vidis litro abertis. Posuere libero varius. Nullam a nisl ut ante blandit hendrerit. Aenean sit amet nisi. Atirei o pau no gatis, per gatis num morreus.";
+	 char *s2 = "Mussum Ipsum, 
+	 cacilds vidis litro abertis. Posuere libero varius. 
+	 Nullam a nisl ut ante blandit hendrerit. Aenean sit 
+	 amet nisi. Atirei o pau no gatis, per gatis num morreus.";
 	 ft_printf("%s", "");
 	 ft_printf(" %s", "");
 	 ft_printf("%s ", "");

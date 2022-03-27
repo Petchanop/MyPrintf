@@ -6,13 +6,11 @@
 /*   By: npiya-is <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 22:26:30 by npiya-is          #+#    #+#             */
-/*   Updated: 2022/03/25 21:15:17 by npiya-is         ###   ########.fr       */
+/*   Updated: 2022/03/27 21:16:03 by npiya-is         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-
-#define FORM_LEN 5
 
 int	ft_check_precision(const char c);
 
@@ -31,7 +29,7 @@ void	ft_assign_format(const char *format, t_format *form)
 	i = 0;
 	if (form->type && form->type != '%')
 	{
-		while (i < FORM_LEN && *(format + i) != form->type)
+		while (i < form->len && *(format + i) != form->type)
 		{
 			if (ft_check_para(*(format + i), *(format + i + 1)))
 				form->para = ft_atoi(format);
@@ -82,7 +80,7 @@ t_format	*ft_check_type(const char *format, t_format *form)
 	int	format_len;
 
 	format_len = 0;
-	while (*(format + format_len) && format_len < FORM_LEN)
+	while (*(format + format_len))
 	{
 		ft_assign_type(*(format + format_len), form);
 		if (form->type)
