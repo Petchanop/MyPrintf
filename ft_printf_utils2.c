@@ -6,7 +6,7 @@
 /*   By: npiya-is <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/18 17:15:29 by npiya-is          #+#    #+#             */
-/*   Updated: 2022/03/20 21:57:44 by npiya-is         ###   ########.fr       */
+/*   Updated: 2022/03/27 12:03:37 by npiya-is         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,10 +70,10 @@ static char	*ft_convert_p(unsigned long long n, int digit, char *str)
 
 char	*ft_ptoa(unsigned long long ptr)
 {
+	char				*str;
 	unsigned long long	n;
 	unsigned long long	i;
-	int		j;
-	char	*str;
+	int					j;
 
 	n = (unsigned long long)ptr;
 	i = n;

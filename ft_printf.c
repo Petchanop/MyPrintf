@@ -6,33 +6,35 @@
 /*   By: npiya-is <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/13 16:57:56 by npiya-is          #+#    #+#             */
-/*   Updated: 2022/03/20 21:48:56 by npiya-is         ###   ########.fr       */
+/*   Updated: 2022/03/27 12:02:37 by npiya-is         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-char	*ft_convert_args(t_format *form, va_list src);
-
-int	ft_check_format(const char c);
-
 t_format	*ft_check_type(char *format, t_format *form);
 
-void	ft_putchar(char c);
+int			ft_print_format(const char *format, t_format *form, va_list src);
 
-void	ft_putstr(char *str);
+int			ft_check_format(const char c);
+
+size_t		ft_putstr(char *str, t_format *form);
+
+char		*ft_convert_args(t_format *form, va_list src);
+
+void		ft_putchar(char c);
 
 void	ft_print_data(t_format	*format)
 {
 	while (format)
 	{
 		printf("form_data->n   : %d\n", format->n);
-        	printf("form_data->len : %d\n", format->len);
-        	printf("form_data->p   : %d\n", format->para);
-        	printf("form_data->w   : %d\n", format->width);
-        	printf("form_data->pr  : %d\n", format->pre);
-        	printf("form_data->f   : %c\n", format->flag);
-        	printf("form_data->t   : %c\n", format->type);
+		printf("form_data->len : %d\n", format->len);
+		printf("form_data->p   : %d\n", format->para);
+		printf("form_data->w   : %d\n", format->width);
+		printf("form_data->pr  : %d\n", format->pre);
+		printf("form_data->f   : %c\n", format->flag);
+		printf("form_data->t   : %c\n", format->type);
 		format = format->next;
 	}
 }
@@ -40,7 +42,7 @@ void	ft_print_data(t_format	*format)
 size_t	ft_count_sign(t_format *format)
 {
 	t_format	*tmp;
-	size_t	i;
+	size_t		i;
 
 	tmp = format;
 	i = 0;
@@ -51,7 +53,6 @@ size_t	ft_count_sign(t_format *format)
 	}
 	return (i);
 }
-		
 
 void	ft_addformat(t_format **form_data, t_format *form)
 {
@@ -85,8 +86,8 @@ t_format	*ft_create_format(const char *format)
 {
 	static t_format	*form;
 	static t_format	*form_data;
-	char	*ptr;
-	int	i;
+	char			*ptr;
+	int				i;
 
 	i = 0;
 	ptr = (char *)format;
@@ -110,49 +111,20 @@ t_format	*ft_create_format(const char *format)
 
 int	ft_printf(const char *format, ...)
 {
-	va_list src;
-	int	args;
-	int	max;
-	int	count;
+	va_list	src;
+	int		max;
 	size_t	i;
+	size_t	len;
 	t_format	*form;
-	t_format	*tmp;
-	char	*str;
 
-	args = 0;
 	i = 0;
 	max = 0;
-	count = 0;
+	len = 0;
 	form = ft_create_format(format);
 	va_start(src, format);
-	while (*(format + i) && i < ft_strlen(format))
-	{
-		if (ft_check_format(*(format + i)) && form)
-		{
-			str = ft_convert_args(form, src);
-			if (str)
-			{
-				ft_putstr(str);
-				max += ft_strlen(str);
-			}
-			if (form->type == 'c')
-				max += 1;
-			free(str);
-			i = form->n + 1;
-			tmp = form;
-			form = form->next;
-			free(tmp);
-		}
-		if (!ft_check_format(*(format + i)) && *(format + i))
-		{
-			count++;
-			ft_putchar(*(format + i));
-			i++;
-		}
-	}
+	max = ft_print_format(format, form, src);
 	va_end(src);
-	//printf("\nmax : %d\n", max + count);
-	return (max + count);
+	return (max);
 }
 /*
 int	main(void)

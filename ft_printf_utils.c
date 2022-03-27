@@ -6,7 +6,7 @@
 /*   By: npiya-is <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/13 17:02:46 by npiya-is          #+#    #+#             */
-/*   Updated: 2022/03/20 21:57:25 by npiya-is         ###   ########.fr       */
+/*   Updated: 2022/03/27 12:35:54 by npiya-is         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,24 +18,74 @@ char	*ft_utoa(unsigned int n);
 
 char	*ft_ptoa(unsigned long long n);
 
-void	ft_putchar(char c)
+size_t	ft_printf_para(char *str, char ch, t_format *form);
+
+size_t	ft_printf_sign(char *str, t_format *form);
+
+size_t	ft_printf_bypara(char *str, t_format *form);
+
+void	ft_putchar(char c);
+
+size_t	ft_putstr(char *stri, size_t index);
+
+size_t	ft_printf_hash(t_format *form)
 {
-	write(1, &c, 1);
+	char	*hex;
+	char	*x;
+	char	*hash;
+
+	hex = "0X";
+	x = "0x";
+	hash = NULL;
+	if (form->flag == '#')
+	{
+		if (form->type == 'x')
+			hash = x;
+		if (form->type == 'X')
+			hash = hex;
+	}
+	if (hash)
+	{
+		while (*hash)
+			ft_putchar(*hash++);
+		return (2);
+	}
+	return (0);
 }
 
-void	ft_putstr(char *str)
+size_t	ft_putformatstr(char *str, t_format *form)
 {
 	size_t	i;
+	size_t	len;
+	char	ch;
 
 	i = 0;
-	while (*(str + i))
+	len = 0;
+	if (form->flag == '0' || form->pre)
+		ch = '0';
+	if (form->flag == '+' && *str != '-')
 	{
-		ft_putchar(*(str + i));
-		i++;
+		ch = '+';
+		ft_putchar(ch);
+		len++;
 	}
+	if (form->para && form->type != 's')
+	{
+		i = ft_printf_sign(str, form);
+		len += ft_printf_para(str, ch, form);
+	}
+	if (form->type == 's' && form->pre == 1)
+	{
+		i = ft_printf_bypara(str, form);
+		return (len + i);
+	}
+	if (*str != '0' && form->flag == '#')
+		len += ft_printf_hash(form);
+	i += ft_putstr(str, i);
+	return (len + i);
 }
 
-char	*ft_convert_hex(long long n, int digit, char *str,int up_or_lo)
+char	*ft_convert_hex(long long n, int digit, char *str, int up_or_lo)
 {
 	char	*hex;
 	char	*lower;
@@ -49,7 +99,7 @@ char	*ft_convert_hex(long long n, int digit, char *str,int up_or_lo)
 		hex = lower;
 	else
 		hex = upper;
-	while (n)
+	while (digit)
 	{
 		str[digit - 1] = hex[(n % 16)];
 		n /= 16;
@@ -58,19 +108,24 @@ char	*ft_convert_hex(long long n, int digit, char *str,int up_or_lo)
 	return (str);
 }
 
-char	*ft_hextoa(long long n, int up_or_lo)
+char	*ft_hextoa(unsigned long long n, int up_or_lo)
 {
-	long long	i;
-	int		j;
-	char	*str;
+	unsigned long long	i;
+	int					j;
+	char				*str;
 
-	i = (long long)n;
+	i = n / 16;
 	j = 1;
-	while (i /= 16)
+	while (i)
+	{
+		i /= 16;
 		j++;
+	}
 	if (n < 0)
 		j += 1;
-	str = ft_calloc(1, j + 1);
+	str = malloc((j + 1) * sizeof(char));
+	if (!str)
+		return (NULL);
 	if (n >= 0)
 		str = ft_convert_hex(n, j, str, up_or_lo);
 	else
@@ -78,16 +133,17 @@ char	*ft_hextoa(long long n, int up_or_lo)
 		str = ft_convert_hex(n, j, str, up_or_lo);
 		str[0] = '-';
 	}
+	str[j] = 0;
 	return (str);
 }
 
 char	*ft_convert_args(t_format *form, va_list src)
 {
-	char	*str;
-	char	c;
-	int	i;
-	long int	u;
 	unsigned char	*ptr;
+	char			*str;
+	char			c;
+	long int		i;
+	long int		u;
 
 	u = 0;
 	i = 0;
@@ -95,7 +151,7 @@ char	*ft_convert_args(t_format *form, va_list src)
 	{
 		c = va_arg(src, int);
 		ft_putchar(c);
-		return NULL;
+		return (NULL);
 	}
 	if (form->type == 's')
 	{
