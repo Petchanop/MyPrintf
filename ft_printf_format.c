@@ -6,7 +6,7 @@
 /*   By: npiya-is <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 16:44:04 by npiya-is          #+#    #+#             */
-/*   Updated: 2022/03/27 12:02:15 by npiya-is         ###   ########.fr       */
+/*   Updated: 2022/03/27 16:11:02 by npiya-is         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	ft_print_format(const char *format, t_format *form, va_list src)
 			str = ft_convert_args(form, src);
 			if (str)
 				max += ft_putformatstr(str, form);
-			if (form->type == 'c')
+			if (form->type == 'c' || form->type == '%')
 				max += 1;
 			free(str);
 			i = form->n + form->len;

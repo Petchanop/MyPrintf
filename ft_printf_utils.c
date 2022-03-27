@@ -6,7 +6,7 @@
 /*   By: npiya-is <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/13 17:02:46 by npiya-is          #+#    #+#             */
-/*   Updated: 2022/03/27 12:35:54 by npiya-is         ###   ########.fr       */
+/*   Updated: 2022/03/27 16:10:59 by npiya-is         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,13 @@
 
 char	*ft_ctoa(char ch);
 
-char	*ft_utoa(unsigned int n);
-
 char	*ft_ptoa(unsigned long long n);
+
+char	*ft_printf_char(t_format *form, va_list src);
+
+char	*ft_printf_integer(t_format *form, va_list src);
+
+char	*ft_printf_hex(t_format *form, va_list src);
 
 size_t	ft_printf_para(char *str, char ch, t_format *form);
 
@@ -25,6 +29,8 @@ size_t	ft_printf_sign(char *str, t_format *form);
 size_t	ft_printf_bypara(char *str, t_format *form);
 
 void	ft_putchar(char c);
+
+size_t	ft_print_plus(void);
 
 size_t	ft_putstr(char *stri, size_t index);
 
@@ -64,21 +70,14 @@ size_t	ft_putformatstr(char *str, t_format *form)
 	if (form->flag == '0' || form->pre)
 		ch = '0';
 	if (form->flag == '+' && *str != '-')
-	{
-		ch = '+';
-		ft_putchar(ch);
-		len++;
-	}
+		len = ft_print_plus();
 	if (form->para && form->type != 's')
 	{
 		i = ft_printf_sign(str, form);
 		len += ft_printf_para(str, ch, form);
 	}
 	if (form->type == 's' && form->pre == 1)
-	{
-		i = ft_printf_bypara(str, form);
-		return (len + i);
-	}
+		return (len + ft_printf_bypara(str, form));
 	if (*str != '0' && form->flag == '#')
 		len += ft_printf_hash(form);
 	i += ft_putstr(str, i);
@@ -140,60 +139,19 @@ char	*ft_hextoa(unsigned long long n, int up_or_lo)
 char	*ft_convert_args(t_format *form, va_list src)
 {
 	unsigned char	*ptr;
-	char			*str;
-	char			c;
-	long int		i;
 	long int		u;
 
 	u = 0;
-	i = 0;
-	if (form->type == 'c')
-	{
-		c = va_arg(src, int);
-		ft_putchar(c);
-		return (NULL);
-	}
-	if (form->type == 's')
-	{
-		str = va_arg(src, char *);
-		if (!str)
-			str = "(null)";
-		return (ft_strdup(str));
-	}
-	if (form->type == 'd')
-	{
-		i = va_arg(src, int);
-		return (ft_itoa(i));
-	}
-	if (form->type == 'i')
-	{
-		i = va_arg(src, int);
-		return (ft_itoa(i));
-	}
-	if (form->type == 'u')
-	{
-		u = va_arg(src, unsigned int);
-		return (ft_utoa(u));
-	}
+	if (form->type == 'c' || form->type == 's' || form->type == '%')
+		return (ft_printf_char(form, src));
+	if (form->type == 'd' || form->type == 'i')
+		return (ft_printf_integer(form, src));
+	if (form->type == 'x' || form->type == 'X' || form->type == 'u')
+		return (ft_printf_hex(form, src));
 	if (form->type == 'p')
 	{
 		ptr = (unsigned char *)va_arg(src, void *);
 		return (ft_ptoa((unsigned long long)ptr));
-	}
-	if (form->type == 'x')
-	{
-		u = va_arg(src, unsigned int);
-		return (ft_hextoa(u, 1));
-	}
-	if (form->type == 'X')
-	{
-		u = va_arg(src, unsigned int);
-		return (ft_hextoa(u, 0));
-	}
-	if (form->type == '%')
-	{
-		c = '%';
-		return (ft_ctoa(c));
 	}
 	return (NULL);
 }
