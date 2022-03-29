@@ -6,7 +6,7 @@
 /*   By: npiya-is <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/13 17:02:46 by npiya-is          #+#    #+#             */
-/*   Updated: 2022/03/27 17:10:32 by npiya-is         ###   ########.fr       */
+/*   Updated: 2022/03/28 00:41:07 by npiya-is         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,13 @@ size_t	ft_printf_sign(char *str, t_format *form);
 
 size_t	ft_printf_bypara(char *str, t_format *form);
 
+size_t	ft_printf_pre(char *str, t_format *form);
+
 void	ft_putchar(char c);
 
-size_t	ft_print_plus(void);
+size_t	ft_print_plus_or_space(char c);
 
-size_t	ft_putstr(char *stri, size_t index);
+size_t	ft_putstr(char *str, size_t index, t_format *form);
 
 size_t	ft_printf_hash(t_format *form)
 {
@@ -62,26 +64,41 @@ size_t	ft_printf_hash(t_format *form)
 size_t	ft_putformatstr(char *str, t_format *form)
 {
 	size_t	i;
+	size_t	j;
 	size_t	len;
 	char	ch;
 
 	i = 0;
 	len = 0;
+	j = 0;
+
 	if (form->flag == '0' || form->pre)
 		ch = '0';
 	if (form->flag == '+' && *str != '-')
-		len = ft_print_plus();
-	if (form->para && form->type != 's')
+		len = ft_print_plus_or_space('+');
+	if (form->flag == ' ' && *str != '-')
+		len = ft_print_plus_or_space(' ');
+	if ((form->para && (form->type != 's')) || (form->width && (form->type != 's')))
 	{
-		i = ft_printf_sign(str, form);
+		len += ft_printf_pre(str, form);
+		i += ft_printf_sign(str, form);
 		len += ft_printf_para(str, ch, form);
 	}
 	if (form->type == 's' && form->pre == 1)
 		return (len + ft_printf_bypara(str, form));
 	if (*str != '0' && form->flag == '#')
 		len += ft_printf_hash(form);
-	i += ft_putstr(str, i);
-	return (len + i);
+	i += ft_putstr(str, i, form);
+	if (form->flag == '-')
+	{
+		while (form->width > (int)(len + i))
+		{
+			ft_putchar(' ');
+			form->width--;
+			j++;
+		}
+	}
+	return (len + i + j);
 }
 
 char	*ft_convert_hex(long long n, int digit, char *str, int up_or_lo)

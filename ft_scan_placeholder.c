@@ -6,7 +6,7 @@
 /*   By: npiya-is <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 22:26:30 by npiya-is          #+#    #+#             */
-/*   Updated: 2022/03/27 21:16:03 by npiya-is         ###   ########.fr       */
+/*   Updated: 2022/03/28 00:23:04 by npiya-is         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	ft_assign_format(const char *format, t_format *form)
 	i = 0;
 	if (form->type && form->type != '%')
 	{
+		form->width = ft_atoi(format);
 		while (i < form->len && *(format + i) != form->type)
 		{
 			if (ft_check_para(*(format + i), *(format + i + 1)))
@@ -43,8 +44,6 @@ void	ft_assign_format(const char *format, t_format *form)
 				form->pre = 1;
 				form->para = ft_atoi((format + i + 1));
 			}
-			if (ft_check_widthf(*(format + i)))
-				form->width = 1;
 			i++;
 		}
 	}

@@ -6,7 +6,7 @@
 /*   By: npiya-is <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/27 12:10:49 by npiya-is          #+#    #+#             */
-/*   Updated: 2022/03/27 16:47:39 by npiya-is         ###   ########.fr       */
+/*   Updated: 2022/03/28 00:31:10 by npiya-is         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,9 @@ char	*ft_hextoa(unsigned long long n, int up_or_lo);
 
 char	*ft_utoa(unsigned int n);
 
-size_t	ft_print_plus(void)
+size_t	ft_print_plus_or_space(char c)
 {
-	char	ch;
-
-	ch = '+';
-	ft_putchar(ch);
+	ft_putchar(c);
 	return (1);
 }
 
