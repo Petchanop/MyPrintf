@@ -25,8 +25,6 @@ size_t	ft_count_printf(t_format *form, va_list src)
 	str = ft_convert_args(form, src);
 	if (str)
 		count += ft_putformatstr(str, form);
-	if (form->type == 'c' || form->type == '%')
-		count += 1;
 	free(str);
 	return (count);
 }
@@ -36,12 +34,12 @@ void    ft_print_data(t_format  *format)
 	while (format)
 	{
 		printf("form_data->n   : %d\n", format->n);
-                printf("form_data->len : %d\n", format->len);
-                printf("form_data->p   : %d\n", format->para);
-                printf("form_data->w   : %d\n", format->width);
-                printf("form_data->pr  : %d\n", format->pre);
-                printf("form_data->f   : %c\n", format->flag);
-                printf("form_data->t   : %c\n", format->type);
-                format = format->next;
-        }
+        printf("form_data->len : %d\n", format->len);
+        printf("form_data->p   : %d\n", format->para);
+        printf("form_data->w   : %d\n", format->width);
+        printf("form_data->pr  : %d\n", format->pre);
+        printf("form_data->f   : %c\n", format->flag);
+        printf("form_data->t   : %c\n", format->type);
+        format = format->next;
+    }
 }

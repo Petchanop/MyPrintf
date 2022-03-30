@@ -12,6 +12,8 @@
 
 #include "ft_printf.h"
 
+char	*ft_ctoa(char ch);
+
 void	ft_putchar(char c);
 
 char	*ft_hextoa(unsigned long long n, int up_or_lo);
@@ -24,6 +26,25 @@ size_t	ft_print_plus_or_space(char c)
 	return (1);
 }
 
+size_t	ft_print_minus(size_t index, t_format *form)
+{
+	size_t	j;
+
+	j = 0;
+	if (form->width < 0)
+		form->width *= -1;
+	if (form->flag == '-')
+	{
+		while (form->width > (int)index)
+		{
+			ft_putchar(' ');
+			form->width--;
+			j++;
+		}
+	}
+	return (j);
+}
+
 char	*ft_printf_char(t_format *form, va_list src)
 {
 	char	*str;
@@ -32,7 +53,7 @@ char	*ft_printf_char(t_format *form, va_list src)
 	if (form->type == 'c')
 	{
 		c = va_arg(src, int);
-		ft_putchar(c);
+		return (ft_ctoa(c));
 	}
 	if (form->type == 's')
 	{
@@ -42,7 +63,7 @@ char	*ft_printf_char(t_format *form, va_list src)
 		return (ft_strdup(str));
 	}
 	if (form->type == '%')
-		ft_putchar('%');
+		return (ft_ctoa('%'));
 	return (NULL);
 }
 

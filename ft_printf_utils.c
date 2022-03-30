@@ -34,6 +34,8 @@ void	ft_putchar(char c);
 
 size_t	ft_print_plus_or_space(char c);
 
+size_t	ft_print_minus(size_t index, t_format *form);
+
 size_t	ft_putstr(char *str, size_t index, t_format *form);
 
 size_t	ft_printf_hash(t_format *form)
@@ -78,7 +80,7 @@ size_t	ft_putformatstr(char *str, t_format *form)
 		len = ft_print_plus_or_space('+');
 	if (form->flag == ' ' && *str != '-')
 		len = ft_print_plus_or_space(' ');
-	if ((form->para && (form->type != 's')) || (form->width && (form->type != 's')))
+	if (form->para || form->width)//&& (form->type != 's')) || (form->width && (form->type != 's')))
 	{
 		len += ft_printf_pre(str, form);
 		i += ft_printf_sign(str, form);
@@ -89,15 +91,7 @@ size_t	ft_putformatstr(char *str, t_format *form)
 	if (*str != '0' && form->flag == '#')
 		len += ft_printf_hash(form);
 	i += ft_putstr(str, i, form);
-	if (form->flag == '-')
-	{
-		while (form->width > (int)(len + i))
-		{
-			ft_putchar(' ');
-			form->width--;
-			j++;
-		}
-	}
+	j += ft_print_minus(i + len, form);
 	return (len + i + j);
 }
 
