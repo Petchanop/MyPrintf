@@ -32,7 +32,7 @@ size_t	ft_printf_pre(char *str, t_format *form);
 
 void	ft_putchar(char c);
 
-size_t	ft_print_plus_or_space(char c);
+size_t	ft_print_plus_or_space(char *str, t_format *form);
 
 size_t	ft_print_minus(size_t index, t_format *form);
 
@@ -66,21 +66,17 @@ size_t	ft_printf_hash(t_format *form)
 size_t	ft_putformatstr(char *str, t_format *form)
 {
 	size_t	i;
-	size_t	j;
 	size_t	len;
 	char	ch;
 
 	i = 0;
 	len = 0;
-	j = 0;
-
+	ch = 0;
 	if (form->flag == '0' || form->pre)
 		ch = '0';
-	if (form->flag == '+' && *str != '-')
-		len = ft_print_plus_or_space('+');
-	if (form->flag == ' ' && *str != '-')
-		len = ft_print_plus_or_space(' ');
-	if (form->para || form->width)//&& (form->type != 's')) || (form->width && (form->type != 's')))
+	if ((form->flag == '+' || form->flag == ' ') && *str != '-')
+		len = ft_print_plus_or_space(str, form);
+	if (form->para || form->width)
 	{
 		len += ft_printf_pre(str, form);
 		i += ft_printf_sign(str, form);
@@ -91,8 +87,8 @@ size_t	ft_putformatstr(char *str, t_format *form)
 	if (*str != '0' && form->flag == '#')
 		len += ft_printf_hash(form);
 	i += ft_putstr(str, i, form);
-	j += ft_print_minus(i + len, form);
-	return (len + i + j);
+	i += ft_print_minus(i + len, form);
+	return (len + i);
 }
 
 char	*ft_convert_hex(long long n, int digit, char *str, int up_or_lo)

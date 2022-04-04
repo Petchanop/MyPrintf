@@ -6,7 +6,7 @@
 /*   By: npiya-is <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/27 17:05:52 by npiya-is          #+#    #+#             */
-/*   Updated: 2022/03/27 23:48:27 by npiya-is         ###   ########.fr       */
+/*   Updated: 2022/04/04 13:28:21 by npiya-is         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ size_t	ft_count_printf(t_format *form, va_list src)
 	free(str);
 	return (count);
 }
-
+/*
 void    ft_print_data(t_format  *format)
 {
 	while (format)
@@ -42,4 +42,4 @@ void    ft_print_data(t_format  *format)
         printf("form_data->t   : %c\n", format->type);
         format = format->next;
     }
-}
+}*/

@@ -20,10 +20,25 @@ char	*ft_hextoa(unsigned long long n, int up_or_lo);
 
 char	*ft_utoa(unsigned int n);
 
-size_t	ft_print_plus_or_space(char c)
+size_t	ft_print_plus_or_space(char *str, t_format *form)
 {
-	ft_putchar(c);
-	return (1);
+	char	c;
+
+	if (form->flag == '+')
+		c = '+';
+	if (form->flag == ' ')
+		c = ' ';
+	if (*str != ' ' && form->type != 's')
+	{
+		ft_putchar(c);
+		return (1);
+	}
+	if (!*str && form->width)
+	{
+		ft_putchar(c);
+		return (1);
+	}
+	return (0);
 }
 
 size_t	ft_print_minus(size_t index, t_format *form)

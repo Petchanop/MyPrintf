@@ -41,12 +41,8 @@ size_t	ft_putstr(char *str, size_t index, t_format *form)
 	size_t	i;
 
 	i = 0;
-
-	
 	if (form->width < 0)
 		form->width *= -1;;
-	//printf("%zu\n", index);
-	//ft_print_data(form);
 	if (form->width > form->para && *str == '0' && form->pre && form->para == 0)
 		return (i);
 	if (*str == '0' && form->pre && !form->para && !form->width)
@@ -74,20 +70,15 @@ size_t	ft_printf_pre(char *str, t_format *form)
 	para = 0;
 	if (form->flag != '-')
 	{
-		if (form->type == 'c' && *str == '\0')
+		if ((form->type == 'c' && *str == '\0') || 
+			(*str == '-' && form->para > (int)ft_strlen(str)))
 			para++;
 		if (form->para > (int)ft_strlen(str))
-		{
 			para += form->para;
-			if (*str == '-')
-				para++;
-		}
-		else if (*str != '0')
+		else if (*str != '0' || (*str == '0' && form->width && (!form->flag || form->type == 'p')))
 			para += (int)ft_strlen(str);
 		else if (*str == '0' && form->para)  
 			para += 1;
-		else if (*str == '0' && form->width && !form->flag)
-			para += ft_strlen(str);
 		while (form->width - (int)i > para)
 		{
 			ft_putchar(' ');
@@ -104,7 +95,7 @@ size_t	ft_printf_para(char *str, char ch, t_format *form)
 	len = 0;
 	if (!ch)
 		return (len);
-	if (form->type != 's')
+	if (form->type != 's' && form->para)
 	{
 		while (form->para  - (int)len > (int)ft_strlen(str))
 		{
