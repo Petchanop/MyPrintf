@@ -18,7 +18,10 @@ t_format	*ft_check_type(char *format, t_format *form);
 
 int			ft_check_format(const char c);
 
-void		ft_putchar(char c);
+void	ft_putchar(char c)
+{
+	write(1, &c, 1);
+}
 
 int	ft_print_format(const char *format, t_format *form, va_list src)
 {
