@@ -6,12 +6,21 @@
 #    By: npiya-is <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/18 17:56:41 by npiya-is          #+#    #+#              #
-#    Updated: 2022/04/28 19:52:49 by npiya-is         ###   ########.fr        #
+#    Updated: 2022/04/28 21:43:02 by npiya-is         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
+CC = gcc
 FLAGS = -Wall -Werror -Wextra
+NAME = libftprintf.a
+LIBC = libft.a
 
+INCS_DIR = ./srcs/include
+LIBFT_DIR = ./libft
+LIBFT = $(LIBFT_DIR)/$(LIBC)
+
+BUILD_DIR = build
+SRC_DIR = ./srcs
 SRCS = ft_printf.c \
        ft_printf_format.c \
        ft_printf_format2.c \
@@ -22,29 +31,29 @@ SRCS = ft_printf.c \
        ft_putstr_utils.c \
        ft_putstr_utils2.c \
 
-OBJS = $(SRCS:.c=.o)
-
-NAME = libftprintf.a
-
-LIBC = libft.a
+OBJS = $(SRCS:%.c=$(BUILD_DIR)/%.o)
 
 all:$(NAME)
 
-.c.o:
-	@$(CC) $(FLAGS) -c $< -o $(<:.c=.o)
+$(NAME):$(OBJS) $(LIBFT)
+	@ar rc $(NAME) $(OBJS)
 
-$(NAME):$(OBJS)
-	@make -C libft/
-	@ar -x libft/$(LIBC)
-	@ar rcs $(NAME) $(OBJS) *.o
+$(OBJS): $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
+	@mkdir -p $(@D)
+	@$(CC) $(CFLAGS) -I $(INCS_DIR) -I $(LIBFT_DIR) -c $< -o $@
 
+$(LIBFT):
+	@make -C $(LIBFT_DIR)
+	@cp $(LIBFT) $(NAME)
 
 bonus: all
 
 clean:
-	@rm -rf $(OBJS) *.o
+	@make clean -C $(LIBFT_DIR)
+	rm -rf $(BUILD_DIR)
 
 fclean: clean
+	@make fclean -C $(LIBFT_DIR)
 	@rm -rf $(NAME)
 
 re: fclean all
